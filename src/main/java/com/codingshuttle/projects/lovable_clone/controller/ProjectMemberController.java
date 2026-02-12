@@ -2,6 +2,7 @@ package com.codingshuttle.projects.lovable_clone.controller;
 
 import com.codingshuttle.projects.lovable_clone.dto.member.InviteMemberRequest;
 import com.codingshuttle.projects.lovable_clone.dto.member.MemberResponse;
+import com.codingshuttle.projects.lovable_clone.dto.member.UpdateMemberRoleRequest;
 import com.codingshuttle.projects.lovable_clone.entity.ProjectMember;
 import com.codingshuttle.projects.lovable_clone.service.ProjectMemberService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class ProjectMemberController {
     private ProjectMemberService projectMemberService2;*/
 
     @GetMapping
-    public ResponseEntity<List<ProjectMember>> getProjectMembers(@PathVariable Long projectId) {
+    public ResponseEntity<List<MemberResponse>> getProjectMembers(@PathVariable Long projectId) {
         Long userId = 1L;
         return ResponseEntity.ok(projectMemberService.getProjectMembers(projectId, userId));
     }
@@ -45,14 +46,14 @@ public class ProjectMemberController {
     public ResponseEntity<MemberResponse> updateMemberRole(
             @PathVariable Long projectId,
             @PathVariable Long memberId,
-            @RequestBody InviteMemberRequest request
+            @RequestBody UpdateMemberRoleRequest request
     ) {
         Long userId = 1L;
         return ResponseEntity.ok(projectMemberService.updateMemberRole(projectId, memberId, request, userId));
     }
 
     @DeleteMapping("/{memberId}") //if you want to update only few thing use //PutMapping got updating whole
-    public ResponseEntity<MemberResponse> deleteMemberRole(
+    public ResponseEntity<MemberResponse> deleteMember(
             @PathVariable Long projectId,
             @PathVariable Long memberId
     ) {
