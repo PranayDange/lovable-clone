@@ -15,7 +15,12 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "projects")
+@Table(name = "projects",
+        indexes = {
+                @Index(name = "idx_projects_updated_at_desc", columnList = "updated_at desc, deleted_at"),
+                @Index(name = "idx_project_deleted_at", columnList = "deleted_at")
+        }
+)
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +30,9 @@ public class Project {
     String name;
 
     //many project to one owner
-    @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
-    User owner;
+    //@ManyToOne
+   // @JoinColumn(name = "owner_id", nullable = false)
+    //User owner;
 
     Boolean isPublic = false;
 
@@ -39,3 +44,4 @@ public class Project {
 
     Instant deletedAt;
 }
+//we create a migration using flyway

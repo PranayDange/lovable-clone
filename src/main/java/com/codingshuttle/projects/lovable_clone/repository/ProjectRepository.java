@@ -13,24 +13,26 @@ import java.util.Optional;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     @Query("""
-             SELECT p FROM Project p
-             WHERE p.deletedAt IS NULL
-             AND p.owner.id = :userId
-             ORDER BY p.updatedAt DESC
-            """
-    )
+            SELECT p as project, pm.projectRole as role
+            FROM Project p
+            JOIN ProjectMember pm ON pm.project.id = p.id
+            WHERE pm.user.id = :userId
+              AND p.deletedAt IS NULL
+            ORDER BY p.updatedAt DESC
+            """)
     List<Project> findAllAccessibleByUser(@Param("userId") Long userId);
 
     //optional is put on single thing only..either you the the thing this thing or you don't get this thing
-    @Query(
-            """
-                    select  p from Project p
-                    LEFT JOIN FETCH p.owner
-                    WHERE p.id= :projectId
-                        AND p.deletedAt IS NULL
-                        AND p.owner.id= :userId
-                    """
-    )
+    @Query("""
+            SELECT p FROM Project p
+            WHERE p.id = :projectId
+                AND p.deletedAt IS NULL
+                AND EXISTS (
+                    SELECT 1 FROM ProjectMember pm
+                    WHERE pm.id.userId = :userId
+                    AND pm.id.projectId = :projectId
+                )
+            """)
     Optional<Project> findAccessibleProjectById(@Param("projectId") Long projectId, @Param("userId") Long userId);
 
 }

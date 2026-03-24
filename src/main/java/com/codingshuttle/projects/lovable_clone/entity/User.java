@@ -22,10 +22,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String email;
-    private String passwordHash;
+    private String username;
+    private String password;
     private String name;
-    private String avatarUrl;
 
     //for date we have two things we have LocalDateTime and Instant
     //both are kind of same thing but with instant we get more functionality
