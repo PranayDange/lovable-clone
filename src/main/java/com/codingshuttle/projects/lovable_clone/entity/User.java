@@ -5,9 +5,13 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 //@FieldDefaults(level = AccessLevel.PRIVATE) we can use this rather than making
 @Getter
@@ -18,7 +22,7 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "users")
 //postgres already has user table so we need to rename this or it will give error
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,6 +39,11 @@ public class User {
     @UpdateTimestamp
     private Instant updatedAt;
     private Instant deletedAt;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
 
 
     //why we are doing everything private
